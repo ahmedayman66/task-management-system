@@ -1,0 +1,500 @@
+{
+  "info": {
+    "_postman_id": "9b12a845-f09c-49ae-967a-115f5d606551",
+    "name": "Task Management System API",
+    "description": "Full collection for Task Management System inspired by Trello",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "boardId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "listId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "taskId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "userId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.success && res.data && res.data.token) {",
+                  "    pm.collectionVariables.set('token', res.data.token);",
+                  "    pm.collectionVariables.set('userId', res.data.user._id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Ahmed Ali\",\n  \"email\": \"ahmed@example.com\",\n  \"password\": \"Password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.success && res.data && res.data.token) {",
+                  "    pm.collectionVariables.set('token', res.data.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"ahmed@example.com\",\n  \"password\": \"Password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            }
+          }
+        },
+        {
+          "name": "Get Current User Profile",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "me"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Boards",
+      "item": [
+        {
+          "name": "Create Board",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.success && res.data && res.data.board) {",
+                  "    pm.collectionVariables.set('boardId', res.data.board._id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Q4 Product Roadmap\",\n  \"description\": \"Strategic roadmap initiatives for the quarter\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/boards",
+              "host": ["{{baseUrl}}"],
+              "path": ["boards"]
+            }
+          }
+        },
+        {
+          "name": "Get User Boards",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/boards",
+              "host": ["{{baseUrl}}"],
+              "path": ["boards"]
+            }
+          }
+        },
+        {
+          "name": "Get Single Board",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/boards/{{boardId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["boards", "{{boardId}}"]
+            }
+          }
+        },
+        {
+          "name": "Update Board",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated Roadmap Title\",\n  \"description\": \"Updated description\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/boards/{{boardId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["boards", "{{boardId}}"]
+            }
+          }
+        },
+        {
+          "name": "Add Member to Board",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"sarah@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/boards/{{boardId}}/members",
+              "host": ["{{baseUrl}}"],
+              "path": ["boards", "{{boardId}}", "members"]
+            }
+          }
+        },
+        {
+          "name": "Remove Member from Board",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/boards/{{boardId}}/members/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["boards", "{{boardId}}", "members", "{{userId}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Board",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/boards/{{boardId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["boards", "{{boardId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Lists",
+      "item": [
+        {
+          "name": "Create List in Board",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.success && res.data && res.data.list) {",
+                  "    pm.collectionVariables.set('listId', res.data.list._id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"To Do\",\n  \"position\": 1000\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/boards/{{boardId}}/lists",
+              "host": ["{{baseUrl}}"],
+              "path": ["boards", "{{boardId}}", "lists"]
+            }
+          }
+        },
+        {
+          "name": "Get Lists by Board",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/boards/{{boardId}}/lists",
+              "host": ["{{baseUrl}}"],
+              "path": ["boards", "{{boardId}}", "lists"]
+            }
+          }
+        },
+        {
+          "name": "Update List Title",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Sprint Backlog\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/lists/{{listId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["lists", "{{listId}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete List",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/lists/{{listId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["lists", "{{listId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Tasks",
+      "item": [
+        {
+          "name": "Create Task in List",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.success && res.data && res.data.task) {",
+                  "    pm.collectionVariables.set('taskId', res.data.task._id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Implement authentication endpoints\",\n  \"description\": \"Write JWT and bcrypt login/register flows\",\n  \"status\": \"todo\",\n  \"priority\": \"high\",\n  \"dueDate\": \"2026-10-15T00:00:00.000Z\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/lists/{{listId}}/tasks",
+              "host": ["{{baseUrl}}"],
+              "path": ["lists", "{{listId}}", "tasks"]
+            }
+          }
+        },
+        {
+          "name": "Get Tasks by List",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/lists/{{listId}}/tasks",
+              "host": ["{{baseUrl}}"],
+              "path": ["lists", "{{listId}}", "tasks"]
+            }
+          }
+        },
+        {
+          "name": "Get Single Task",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/tasks/{{taskId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["tasks", "{{taskId}}"]
+            }
+          }
+        },
+        {
+          "name": "Filter & Paginate Tasks",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/tasks?status=todo&priority=high&page=1&limit=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["tasks"],
+              "query": [
+                { "key": "status", "value": "todo" },
+                { "key": "priority", "value": "high" },
+                { "key": "page", "value": "1" },
+                { "key": "limit", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Task Details",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated Task Title\",\n  \"priority\": \"medium\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tasks/{{taskId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["tasks", "{{taskId}}"]
+            }
+          }
+        },
+        {
+          "name": "Update Task Status",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"in_progress\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tasks/{{taskId}}/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["tasks", "{{taskId}}", "status"]
+            }
+          }
+        },
+        {
+          "name": "Assign Task",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"{{userId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tasks/{{taskId}}/assign",
+              "host": ["{{baseUrl}}"],
+              "path": ["tasks", "{{taskId}}", "assign"]
+            }
+          }
+        },
+        {
+          "name": "Delete Task",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/tasks/{{taskId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["tasks", "{{taskId}}"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
