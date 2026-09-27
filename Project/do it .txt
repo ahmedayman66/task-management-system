@@ -1,0 +1,1948 @@
+# MASTER PROMPT — FULL-STACK TASK MANAGEMENT SYSTEM
+
+You are acting as a senior full-stack software engineer helping me develop my individual final project.
+
+Your job is to help me build a professional, clean, maintainable, fully functional **Task Management System** inspired by Trello.
+
+The project must contain:
+
+* Backend: Node.js + Express.js
+* Database: MongoDB + Mongoose
+* Frontend: React
+* Authentication: JWT
+* Password hashing: bcrypt
+* RESTful API
+* Input validation
+* Authorization
+* Centralized error handling
+* Filtering and pagination
+* Responsive frontend
+* Complete frontend/backend integration
+
+Do NOT invent requirements that conflict with the specification below.
+
+---
+
+# 1. PROJECT OBJECTIVE
+
+Build a full-stack Task Management System where authenticated users can:
+
+1. Register and log in.
+2. Create and manage boards.
+3. Add members to boards.
+4. Create lists inside boards.
+5. Create tasks inside lists.
+6. Assign tasks to users.
+7. Change task status.
+8. Edit and delete tasks.
+9. Set due dates.
+10. Filter tasks.
+11. Navigate through a clean dashboard.
+12. Manage their boards from a responsive React interface.
+
+The application should feel like a simplified professional Trello-style project management application.
+
+The goal is not to clone Trello exactly.
+
+Prioritize:
+
+* correctness
+* clean architecture
+* maintainability
+* security
+* REST API quality
+* database design
+* good UX
+* understandable code
+
+---
+
+# 2. IMPORTANT DEVELOPMENT RULES
+
+Follow these rules throughout the entire development process.
+
+## Rule 1 — Inspect Before Implementing
+
+Before writing substantial code:
+
+* inspect the current repository
+* inspect existing files
+* inspect package configuration
+* inspect environment configuration
+* inspect available tools
+* identify whether the project is empty or partially implemented
+
+Do not overwrite existing useful work blindly.
+
+If something already exists and is correct, reuse it.
+
+---
+
+## Rule 2 — Requirements First
+
+Create an internal implementation checklist based on this specification.
+
+Track:
+
+* completed items
+* remaining items
+* discovered issues
+* tests performed
+
+At the end, perform a full requirement audit.
+
+---
+
+## Rule 3 — Prefer Simplicity
+
+Do not introduce unnecessary complexity.
+
+Avoid adding:
+
+* microservices
+* Redux unless genuinely necessary
+* unnecessary abstractions
+* complicated design patterns
+* unnecessary dependencies
+* unnecessary infrastructure
+
+This is a student final project, not an enterprise distributed system.
+
+Use clean and understandable engineering practices.
+
+---
+
+## Rule 4 — Verify Every Major Step
+
+After implementing each major feature:
+
+1. run the relevant tests/checks
+2. run lint if configured
+3. run build
+4. test API behavior where applicable
+5. inspect errors
+6. fix errors before continuing
+
+Never assume that code works simply because it was generated.
+
+---
+
+## Rule 5 — Do Not Hide Errors
+
+Do not use broad error suppression such as:
+
+```js
+try {
+   ...
+} catch (error) {}
+```
+
+Do not silently ignore failures.
+
+Errors must be handled intentionally.
+
+---
+
+## Rule 6 — Environment Variables
+
+Never hard-code secrets.
+
+Use:
+
+```env
+PORT=
+MONGODB_URI=
+JWT_SECRET=
+JWT_EXPIRES_IN=
+CLIENT_URL=
+```
+
+Create:
+
+```text
+.env.example
+```
+
+Never commit `.env`.
+
+---
+
+# 3. REPOSITORY STRUCTURE
+
+Use a clean monorepo structure:
+
+```text
+task-management-system/
+│
+├── client/
+│   ├── src/
+│   │   ├── api/
+│   │   ├── assets/
+│   │   ├── components/
+│   │   ├── hooks/
+│   │   ├── layouts/
+│   │   ├── pages/
+│   │   ├── routes/
+│   │   ├── services/
+│   │   ├── context/
+│   │   ├── utils/
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   │
+│   ├── public/
+│   ├── package.json
+│   └── ...
+│
+├── server/
+│   ├── src/
+│   │   ├── config/
+│   │   │   └── db.js
+│   │   │
+│   │   ├── controllers/
+│   │   │   ├── auth.controller.js
+│   │   │   ├── board.controller.js
+│   │   │   ├── list.controller.js
+│   │   │   └── task.controller.js
+│   │   │
+│   │   ├── middleware/
+│   │   │   ├── auth.middleware.js
+│   │   │   ├── error.middleware.js
+│   │   │   └── validate.middleware.js
+│   │   │
+│   │   ├── models/
+│   │   │   ├── User.js
+│   │   │   ├── Board.js
+│   │   │   ├── List.js
+│   │   │   └── Task.js
+│   │   │
+│   │   ├── routes/
+│   │   │   ├── auth.routes.js
+│   │   │   ├── board.routes.js
+│   │   │   ├── list.routes.js
+│   │   │   └── task.routes.js
+│   │   │
+│   │   ├── validators/
+│   │   │   ├── auth.validator.js
+│   │   │   ├── board.validator.js
+│   │   │   ├── list.validator.js
+│   │   │   └── task.validator.js
+│   │   │
+│   │   ├── services/
+│   │   ├── utils/
+│   │   ├── app.js
+│   │   └── server.js
+│   │
+│   ├── tests/
+│   ├── .env.example
+│   └── package.json
+│
+├── postman/
+│   └── Task-Management-System.postman_collection.json
+│
+├── README.md
+├── .gitignore
+└── package.json
+```
+
+You may adjust this structure if there is a strong technical reason.
+
+Do not create empty folders that are never used.
+
+---
+
+# 4. BACKEND STACK
+
+Use:
+
+* Node.js
+* Express.js
+* MongoDB
+* Mongoose
+* JWT
+* bcrypt
+* validation library such as Zod, Joi, or express-validator
+* helmet
+* cors
+* express-rate-limit
+* logging middleware where appropriate
+
+Prefer JavaScript unless the existing project explicitly uses TypeScript.
+
+Do not migrate the project to TypeScript unless necessary.
+
+---
+
+# 5. FRONTEND STACK
+
+Use:
+
+* React
+* Vite
+* React Router
+* Axios or a clean HTTP client abstraction
+
+For styling, use a lightweight maintainable approach.
+
+Tailwind CSS is acceptable if configured cleanly.
+
+The UI should be:
+
+* responsive
+* clean
+* modern
+* professional
+* easy to understand
+
+Avoid excessive animations.
+
+---
+
+# 6. DATABASE DESIGN
+
+There must be at least these four Mongoose models:
+
+```text
+User
+Board
+List
+Task
+```
+
+---
+
+# 7. USER MODEL
+
+Suggested structure:
+
+```js
+{
+  name: String,
+  email: String,
+  password: String,
+  avatar: String,
+  createdAt: Date,
+  updatedAt: Date
+}
+```
+
+Requirements:
+
+* email required
+* email unique
+* email normalized
+* password required
+* password hashed with bcrypt
+* never return password in normal API responses
+
+Do not store plaintext passwords.
+
+---
+
+# 8. BOARD MODEL
+
+Suggested structure:
+
+```js
+{
+  title: String,
+  description: String,
+  owner: ObjectId,
+  members: [ObjectId],
+  createdAt: Date,
+  updatedAt: Date
+}
+```
+
+Relationships:
+
+```text
+Board.owner -> User
+Board.members -> User[]
+```
+
+Requirements:
+
+* title required
+* owner required
+* members should reference valid users
+
+A newly created board should automatically include its owner as a member.
+
+---
+
+# 9. LIST MODEL
+
+Suggested structure:
+
+```js
+{
+  title: String,
+  board: ObjectId,
+  position: Number,
+  createdAt: Date,
+  updatedAt: Date
+}
+```
+
+Relationship:
+
+```text
+List.board -> Board
+```
+
+Requirements:
+
+* title required
+* board required
+* position used for ordering lists
+
+---
+
+# 10. TASK MODEL
+
+Suggested structure:
+
+```js
+{
+  title: String,
+  description: String,
+  list: ObjectId,
+  assignedTo: ObjectId,
+  createdBy: ObjectId,
+  status: String,
+  priority: String,
+  dueDate: Date,
+  position: Number,
+  createdAt: Date,
+  updatedAt: Date
+}
+```
+
+Relationships:
+
+```text
+Task.list -> List
+Task.assignedTo -> User
+Task.createdBy -> User
+```
+
+Status enum:
+
+```text
+todo
+in_progress
+done
+```
+
+Priority enum:
+
+```text
+low
+medium
+high
+```
+
+`assignedTo` may be null.
+
+---
+
+# 11. DATABASE INDEXING
+
+Add sensible indexes where useful.
+
+At minimum consider:
+
+```text
+User.email
+Task.status
+Task.list
+Task.assignedTo
+List.board
+```
+
+Do not add indexes blindly.
+
+---
+
+# 12. AUTHENTICATION
+
+Implement:
+
+```text
+POST /api/auth/register
+POST /api/auth/login
+GET  /api/auth/me
+```
+
+Registration flow:
+
+```text
+request
+↓
+validate input
+↓
+check email
+↓
+hash password
+↓
+create user
+↓
+return safe user data + JWT
+```
+
+Login flow:
+
+```text
+request
+↓
+validate
+↓
+find user
+↓
+compare password
+↓
+generate JWT
+↓
+return token + safe user data
+```
+
+JWT payload should contain a minimal identifier such as:
+
+```js
+{
+  userId: user._id
+}
+```
+
+Do not put sensitive information inside the JWT.
+
+---
+
+# 13. AUTHORIZATION
+
+Authentication is not enough.
+
+Implement authorization checks.
+
+Examples:
+
+* only authenticated users can access protected endpoints
+* only board members can access board data
+* only board owner can perform owner-only operations
+* only authorized users can create/update/delete related lists
+* only authorized users can modify tasks
+* a task cannot be assigned to a user who does not belong to the board
+
+Do not rely only on frontend checks.
+
+Authorization must be enforced on the backend.
+
+---
+
+# 14. API DESIGN
+
+Base URL:
+
+```text
+/api
+```
+
+---
+
+## AUTH
+
+### Register
+
+```http
+POST /api/auth/register
+```
+
+Body:
+
+```json
+{
+  "name": "Ahmed",
+  "email": "ahmed@example.com",
+  "password": "Password123"
+}
+```
+
+Response:
+
+```json
+{
+  "success": true,
+  "data": {
+    "user": {},
+    "token": "..."
+  }
+}
+```
+
+---
+
+### Login
+
+```http
+POST /api/auth/login
+```
+
+Body:
+
+```json
+{
+  "email": "ahmed@example.com",
+  "password": "Password123"
+}
+```
+
+---
+
+### Current User
+
+```http
+GET /api/auth/me
+```
+
+Requires JWT.
+
+---
+
+# 15. BOARD API
+
+Implement:
+
+```text
+POST   /api/boards
+GET    /api/boards
+GET    /api/boards/:boardId
+PATCH  /api/boards/:boardId
+DELETE /api/boards/:boardId
+```
+
+Optional member management:
+
+```text
+POST   /api/boards/:boardId/members
+DELETE /api/boards/:boardId/members/:userId
+```
+
+Board creation:
+
+```json
+{
+  "title": "My Project",
+  "description": "Project description"
+}
+```
+
+The authenticated user becomes the owner and initial member.
+
+---
+
+# 16. LIST API
+
+Implement:
+
+```text
+POST   /api/boards/:boardId/lists
+GET    /api/boards/:boardId/lists
+PATCH  /api/lists/:listId
+DELETE /api/lists/:listId
+```
+
+Example:
+
+```json
+{
+  "title": "To Do"
+}
+```
+
+Lists must belong to the specified board.
+
+---
+
+# 17. TASK API
+
+Implement:
+
+```text
+POST   /api/lists/:listId/tasks
+GET    /api/lists/:listId/tasks
+GET    /api/tasks/:taskId
+PATCH  /api/tasks/:taskId
+DELETE /api/tasks/:taskId
+```
+
+Task creation example:
+
+```json
+{
+  "title": "Implement authentication",
+  "description": "Create JWT authentication",
+  "assignedTo": "USER_ID",
+  "status": "todo",
+  "priority": "high",
+  "dueDate": "2026-10-15"
+}
+```
+
+---
+
+# 18. TASK STATUS
+
+Provide a clean endpoint:
+
+```http
+PATCH /api/tasks/:taskId/status
+```
+
+Body:
+
+```json
+{
+  "status": "in_progress"
+}
+```
+
+Allowed values:
+
+```text
+todo
+in_progress
+done
+```
+
+---
+
+# 19. TASK ASSIGNMENT
+
+Provide:
+
+```http
+PATCH /api/tasks/:taskId/assign
+```
+
+Body:
+
+```json
+{
+  "userId": "USER_ID"
+}
+```
+
+Validate that the assigned user is a member of the board.
+
+---
+
+# 20. FILTERING
+
+At least one endpoint must support filtering.
+
+Implement task filtering such as:
+
+```http
+GET /api/tasks?status=todo
+GET /api/tasks?priority=high
+GET /api/tasks?assignedTo=USER_ID
+```
+
+You may support combined filters:
+
+```http
+GET /api/tasks?status=in_progress&priority=high
+```
+
+Do not make filtering unnecessarily complicated.
+
+---
+
+# 21. PAGINATION
+
+Implement pagination on a list endpoint.
+
+Example:
+
+```http
+GET /api/tasks?page=1&limit=10
+```
+
+Response should contain useful metadata:
+
+```json
+{
+  "success": true,
+  "data": [],
+  "pagination": {
+    "page": 1,
+    "limit": 10,
+    "total": 25,
+    "totalPages": 3
+  }
+}
+```
+
+Prevent unreasonable limits.
+
+---
+
+# 22. API RESPONSE FORMAT
+
+Use a consistent response structure.
+
+Success example:
+
+```json
+{
+  "success": true,
+  "data": {}
+}
+```
+
+Error example:
+
+```json
+{
+  "success": false,
+  "error": {
+    "message": "Board not found",
+    "code": "BOARD_NOT_FOUND"
+  }
+}
+```
+
+Use appropriate HTTP status codes.
+
+Examples:
+
+```text
+200 OK
+201 Created
+400 Bad Request
+401 Unauthorized
+403 Forbidden
+404 Not Found
+409 Conflict
+422 Unprocessable Entity
+500 Internal Server Error
+```
+
+Do not return random status codes.
+
+---
+
+# 23. VALIDATION
+
+Validate:
+
+* registration
+* login
+* board creation/update
+* list creation/update
+* task creation/update
+* status
+* priority
+* due dates
+* IDs where appropriate
+* pagination values
+* query filters
+
+Examples:
+
+Invalid:
+
+```json
+{
+  "email": "abc"
+}
+```
+
+should return a meaningful validation error.
+
+Do not trust frontend validation alone.
+
+---
+
+# 24. CENTRALIZED ERROR HANDLING
+
+Create centralized Express error middleware.
+
+Expected flow:
+
+```text
+Route
+↓
+Controller
+↓
+Service / Model
+↓
+Error
+↓
+Central Error Middleware
+↓
+Consistent JSON response
+```
+
+Handle:
+
+* validation errors
+* MongoDB errors
+* duplicate key errors
+* JWT errors
+* not found
+* authorization errors
+* unexpected errors
+
+Do not expose stack traces in production responses.
+
+---
+
+# 25. SECURITY
+
+Implement reasonable security practices:
+
+* bcrypt password hashing
+* JWT authentication
+* helmet
+* CORS
+* rate limiting on authentication endpoints
+* input validation
+* safe error messages
+* environment variables
+* no secrets in source code
+* authorization checks
+* sanitize/validate MongoDB-related input where appropriate
+
+Do not over-engineer security.
+
+---
+
+# 26. FRONTEND PAGES
+
+Create at least:
+
+```text
+/login
+/register
+/dashboard
+/boards/:boardId
+```
+
+Optional:
+
+```text
+/profile
+/404
+```
+
+---
+
+# 27. LOGIN PAGE
+
+Requirements:
+
+* email input
+* password input
+* validation
+* loading state
+* error state
+* successful login
+* redirect to dashboard
+* persist authentication appropriately
+
+Do not store sensitive information unnecessarily.
+
+---
+
+# 28. REGISTER PAGE
+
+Fields:
+
+```text
+Name
+Email
+Password
+Confirm Password
+```
+
+Validate:
+
+* required fields
+* valid email
+* password requirements
+* matching passwords
+
+After successful registration:
+
+* authenticate the user
+* redirect to dashboard
+
+---
+
+# 29. DASHBOARD
+
+Dashboard should display:
+
+* current user
+* user's boards
+* create board button
+* board cards
+* logout
+* useful empty state
+
+Example:
+
+```text
+---------------------------------------
+Task Manager
+
+Welcome, Ahmed
+
+[ + Create Board ]
+
+My Boards
+
+[ Project A ]
+[ Project B ]
+[ University ]
+---------------------------------------
+```
+
+---
+
+# 30. BOARD PAGE
+
+The board page should visually resemble a Kanban board.
+
+Example:
+
+```text
+---------------------------------------------------------
+Project Board
+
+[ + Add List ]
+
+---------------------------------------------------------
+
+TO DO              IN PROGRESS          DONE
+
+[ Task ]           [ Task ]             [ Task ]
+[ Task ]           [ Task ]             [ Task ]
+
+[ + Add Task ]     [ + Add Task ]       [ + Add Task ]
+
+---------------------------------------------------------
+```
+
+---
+
+# 31. TASK CARD
+
+Each task card may display:
+
+* title
+* short description
+* status
+* priority
+* assigned user
+* due date
+
+Use clear visual hierarchy.
+
+Do not overload the card.
+
+---
+
+# 32. TASK MODAL
+
+Create/edit task modal should support:
+
+```text
+Title
+Description
+Status
+Priority
+Assigned User
+Due Date
+```
+
+Buttons:
+
+```text
+Save
+Cancel
+Delete (when editing)
+```
+
+Include validation and loading states.
+
+---
+
+# 33. LIST MANAGEMENT
+
+Users should be able to:
+
+* create list
+* rename list
+* delete list
+* create tasks inside list
+
+Ask for confirmation before destructive operations where appropriate.
+
+---
+
+# 34. BOARD MANAGEMENT
+
+Users should be able to:
+
+* create board
+* edit board
+* delete board
+* open board
+* see board members
+
+Owner-only operations must be enforced by backend authorization.
+
+---
+
+# 35. FRONTEND API ARCHITECTURE
+
+Do not put random Axios calls everywhere.
+
+Create a clean API layer.
+
+Example:
+
+```text
+client/src/api/
+client/src/services/
+```
+
+Possible organization:
+
+```text
+authApi.js
+boardApi.js
+listApi.js
+taskApi.js
+```
+
+Use a configured HTTP client.
+
+Automatically attach JWT where appropriate.
+
+Handle:
+
+* 401
+* 403
+* validation errors
+* network errors
+
+in a consistent manner.
+
+---
+
+# 36. AUTH STATE
+
+Create a clean authentication mechanism.
+
+It should provide:
+
+```text
+currentUser
+token/auth state
+login()
+register()
+logout()
+loading
+```
+
+Protected routes should redirect unauthenticated users to:
+
+```text
+/login
+```
+
+Avoid duplicating auth logic across components.
+
+---
+
+# 37. LOADING / ERROR / EMPTY STATES
+
+Every major data-driven UI should have:
+
+### Loading
+
+```text
+Loading...
+```
+
+### Error
+
+A readable error message with retry where appropriate.
+
+### Empty
+
+Example:
+
+```text
+You don't have any boards yet.
+
+[ Create your first board ]
+```
+
+Never leave the interface blank.
+
+---
+
+# 38. RESPONSIVE DESIGN
+
+The UI must work on:
+
+* desktop
+* laptop
+* tablet
+* mobile
+
+For mobile:
+
+* Kanban columns may scroll horizontally
+* cards should remain readable
+* modals should fit the viewport
+* navigation should remain usable
+
+---
+
+# 39. UX RULES
+
+Use:
+
+* clear buttons
+* consistent spacing
+* consistent typography
+* readable forms
+* meaningful empty states
+* confirmation for destructive operations
+* disabled buttons while submitting
+* loading indicators
+* toast/alert feedback where useful
+
+Avoid:
+
+* excessive animations
+* huge gradients
+* unnecessary decorative elements
+* clutter
+* fake dashboard metrics
+
+---
+
+# 40. OPTIONAL BONUS FEATURES
+
+After all required functionality works, consider adding only if time permits:
+
+### Comments
+
+```text
+Task
+↓
+Comments
+```
+
+### Activity log
+
+Track events such as:
+
+```text
+Task created
+Task assigned
+Status changed
+Task completed
+```
+
+### Drag and drop
+
+Allow moving tasks between lists.
+
+If implementing drag-and-drop, ensure the backend correctly updates:
+
+* list
+* position
+* authorization
+
+Do not add these features if they make the core system unstable.
+
+Core requirements always have priority.
+
+---
+
+# 41. TESTING
+
+Implement meaningful backend tests where practical.
+
+Test at least:
+
+### Authentication
+
+* registration works
+* duplicate email rejected
+* login works
+* invalid password rejected
+* protected endpoint rejects unauthenticated user
+
+### Boards
+
+* authenticated user can create board
+* owner can update board
+* unauthorized user cannot modify board
+
+### Lists
+
+* authorized user can create list
+* list belongs to correct board
+
+### Tasks
+
+* authorized user can create task
+* task belongs to correct list
+* status validation works
+* assignment validation works
+* unauthorized access is rejected
+
+### Filtering
+
+* status filtering works
+
+### Pagination
+
+* page/limit works
+* metadata is correct
+
+---
+
+# 42. POSTMAN COLLECTION
+
+Create:
+
+```text
+postman/Task-Management-System.postman_collection.json
+```
+
+Include all important endpoints.
+
+Organize folders:
+
+```text
+Authentication
+Boards
+Lists
+Tasks
+```
+
+Use environment variables where useful:
+
+```text
+baseUrl
+token
+boardId
+listId
+taskId
+userId
+```
+
+Make the collection easy to use.
+
+---
+
+# 43. README
+
+Create a professional README.
+
+It must include:
+
+## Project Overview
+
+Explain what the system does.
+
+## Features
+
+List implemented functionality.
+
+## Tech Stack
+
+```text
+React
+Node.js
+Express
+MongoDB
+Mongoose
+JWT
+bcrypt
+```
+
+## Project Structure
+
+Explain the important directories.
+
+## Requirements
+
+Mention:
+
+* Node.js
+* MongoDB
+
+## Installation
+
+Backend:
+
+```bash
+cd server
+npm install
+```
+
+Frontend:
+
+```bash
+cd client
+npm install
+```
+
+## Environment Variables
+
+Explain `.env`.
+
+## Running Backend
+
+```bash
+npm run dev
+```
+
+## Running Frontend
+
+```bash
+npm run dev
+```
+
+## API Documentation
+
+Explain the main endpoints.
+
+## Authentication
+
+Explain JWT usage.
+
+## Testing
+
+Explain how to run tests.
+
+## Postman
+
+Explain how to import the collection.
+
+## Future Improvements
+
+Mention optional features not implemented.
+
+Do not claim features that do not actually exist.
+
+---
+
+# 44. GIT
+
+Keep the Git history meaningful.
+
+Prefer commits such as:
+
+```text
+chore: initialize project structure
+feat: add database configuration
+feat: implement user authentication
+feat: implement board management
+feat: implement list management
+feat: implement task management
+feat: add authorization middleware
+feat: add filtering and pagination
+feat: implement React authentication
+feat: implement dashboard
+feat: implement board kanban interface
+fix: resolve task authorization issue
+test: add API tests
+docs: add README and API documentation
+```
+
+Do not create fake commits or fake history.
+
+Only commit actual changes.
+
+---
+
+# 45. CODE QUALITY
+
+Follow these principles:
+
+* meaningful names
+* small functions
+* avoid duplicated logic
+* reusable components
+* reusable middleware
+* controllers should not become enormous
+* avoid deeply nested code
+* clear separation of concerns
+* comments only where useful
+* no dead code
+* no unused dependencies
+* no unused variables
+* no console debugging left unnecessarily
+
+---
+
+# 46. PERFORMANCE
+
+Keep performance reasonable.
+
+Avoid:
+
+* unnecessary database queries
+* fetching all users repeatedly
+* returning huge objects
+* returning passwords
+* unnecessary frontend re-renders
+* duplicate API calls
+
+Use `.select()` / population intentionally.
+
+Do not over-optimize prematurely.
+
+---
+
+# 47. MONGOOSE POPULATION
+
+Use population where it improves API usability.
+
+For example, task responses may include:
+
+```text
+assignedTo:
+  name
+  email
+```
+
+instead of only returning the ObjectId.
+
+But avoid excessive nested population.
+
+---
+
+# 48. DATA INTEGRITY
+
+Enforce relationships.
+
+Examples:
+
+A Task's list must exist.
+
+A List's board must exist.
+
+A task's assigned user must belong to the corresponding board.
+
+Deleting a board should handle its related lists/tasks properly.
+
+Deleting a list should handle its related tasks properly.
+
+Choose a consistent strategy.
+
+Do not leave orphaned records.
+
+---
+
+# 49. HTTP API ERROR CASES
+
+Explicitly handle:
+
+```text
+Invalid ObjectId
+Missing required field
+Duplicate email
+Invalid credentials
+Expired JWT
+Missing JWT
+Unauthorized board access
+Unauthorized task access
+Board not found
+List not found
+Task not found
+User not found
+Invalid task status
+Invalid priority
+Invalid pagination
+```
+
+---
+
+# 50. FINAL QA CHECKLIST
+
+Before considering the project complete, verify all of the following.
+
+## Backend
+
+* [ ] Server starts successfully
+* [ ] MongoDB connection works
+* [ ] Environment variables work
+* [ ] User registration works
+* [ ] Passwords are hashed
+* [ ] Login works
+* [ ] JWT works
+* [ ] `/auth/me` works
+* [ ] Board CRUD works
+* [ ] List CRUD works
+* [ ] Task CRUD works
+* [ ] Task assignment works
+* [ ] Task status update works
+* [ ] Validation works
+* [ ] Authorization works
+* [ ] Error middleware works
+* [ ] Filtering works
+* [ ] Pagination works
+* [ ] Security middleware configured
+* [ ] No passwords exposed
+
+## Frontend
+
+* [ ] React app starts
+* [ ] Login works
+* [ ] Register works
+* [ ] Logout works
+* [ ] Protected routes work
+* [ ] Dashboard works
+* [ ] Board creation works
+* [ ] Board editing works
+* [ ] Board deletion works
+* [ ] Lists display correctly
+* [ ] Lists can be created
+* [ ] Lists can be edited
+* [ ] Lists can be deleted
+* [ ] Tasks can be created
+* [ ] Tasks can be edited
+* [ ] Tasks can be deleted
+* [ ] Tasks can be assigned
+* [ ] Status can be changed
+* [ ] Filtering works
+* [ ] Loading states work
+* [ ] Error states work
+* [ ] Empty states work
+* [ ] Responsive layout works
+
+## Documentation
+
+* [ ] README exists
+* [ ] `.env.example` exists
+* [ ] Postman collection exists
+* [ ] Setup instructions work
+* [ ] API documentation is accurate
+* [ ] No undocumented fake features
+
+## Code Quality
+
+* [ ] No obvious dead code
+* [ ] No unnecessary dependencies
+* [ ] No exposed secrets
+* [ ] No password leaks
+* [ ] No major console errors
+* [ ] No broken imports
+* [ ] No lint errors where configured
+* [ ] Production build succeeds
+
+---
+
+# 51. FINAL REQUIREMENT AUDIT
+
+At the very end, compare the implementation against these academic requirements:
+
+```text
+RESTful API
+MongoDB + Mongoose
+At least 4 Mongoose models
+JWT authentication
+Input validation
+Pagination OR filtering
+Centralized error handling
+Clean folder structure
+Frontend using React
+GitHub-ready source
+README
+.env.example
+Postman collection
+All endpoints tested
+Meaningful Git commits
+```
+
+Create a final report with:
+
+```text
+REQUIREMENT AUDIT
+
+Requirement                  Status
+------------------------------------------------
+RESTful API                  PASS/FAIL
+MongoDB + Mongoose           PASS/FAIL
+4+ Models                    PASS/FAIL
+JWT Authentication           PASS/FAIL
+Validation                   PASS/FAIL
+Filtering/Pagination         PASS/FAIL
+Error Handling               PASS/FAIL
+Clean Structure              PASS/FAIL
+React Frontend               PASS/FAIL
+README                       PASS/FAIL
+.env.example                 PASS/FAIL
+Postman                      PASS/FAIL
+Testing                      PASS/FAIL
+```
+
+Do not mark anything PASS unless you actually verified it.
+
+---
+
+# 52. FINAL BUILD VERIFICATION
+
+Run the actual commands necessary to verify:
+
+Backend:
+
+```bash
+npm install
+npm run dev
+```
+
+Frontend:
+
+```bash
+npm install
+npm run dev
+```
+
+And where applicable:
+
+```bash
+npm test
+npm run lint
+npm run build
+```
+
+If a command does not exist, do not invent it.
+
+Inspect the actual package.json scripts first.
+
+Fix discovered errors.
+
+---
+
+# 53. IMPORTANT BEHAVIOR
+
+When implementing:
+
+* do not ask unnecessary questions
+* make reasonable technical decisions
+* follow this specification
+* inspect before modifying
+* keep the implementation understandable
+* verify your work
+* fix errors rather than ignoring them
+
+If a genuinely ambiguous requirement blocks implementation, explain the ambiguity and choose the simplest reasonable solution consistent with the assignment.
+
+Do not silently change the project's core architecture.
+
+---
+
+# 54. IMPLEMENTATION ORDER
+
+Follow this order unless the existing repository requires a different sequence:
+
+### Phase 1 — Analysis
+
+Inspect repository.
+
+Create implementation checklist.
+
+Confirm architecture.
+
+### Phase 2 — Backend Foundation
+
+Create:
+
+* server
+* Express app
+* database connection
+* environment configuration
+* middleware
+* error handling
+
+### Phase 3 — Database
+
+Implement:
+
+* User
+* Board
+* List
+* Task
+
+Verify relationships.
+
+### Phase 4 — Authentication
+
+Implement:
+
+* register
+* login
+* JWT
+* current user
+* auth middleware
+
+Test authentication.
+
+### Phase 5 — Boards
+
+Implement complete Board API.
+
+Test authorization.
+
+### Phase 6 — Lists
+
+Implement List API.
+
+Test board relationships.
+
+### Phase 7 — Tasks
+
+Implement Task API.
+
+Add:
+
+* assignment
+* status
+* priority
+* due date
+
+### Phase 8 — Filtering/Pagination
+
+Implement and test both where practical.
+
+### Phase 9 — Security & Validation
+
+Complete:
+
+* validation
+* authorization
+* helmet
+* CORS
+* rate limiting
+* centralized errors
+
+### Phase 10 — Frontend Foundation
+
+Create:
+
+* React/Vite
+* routing
+* API layer
+* auth state
+* global UI structure
+
+### Phase 11 — Authentication UI
+
+Build:
+
+* Login
+* Register
+* Protected routes
+* Logout
+
+### Phase 12 — Dashboard
+
+Build:
+
+* board listing
+* board creation
+* board editing
+* board deletion
+
+### Phase 13 — Kanban Board
+
+Build:
+
+* board page
+* lists
+* task cards
+* task modal
+* list management
+* task management
+
+### Phase 14 — Integration
+
+Connect every frontend feature to the real backend.
+
+Do not use fake/mock data in the final application.
+
+### Phase 15 — QA
+
+Test the complete system end-to-end.
+
+### Phase 16 — Documentation
+
+Create:
+
+* README
+* `.env.example`
+* Postman collection
+
+### Phase 17 — Final Audit
+
+Run the complete requirement checklist.
+
+Fix all remaining issues.
+
+---
+
+# 55. DEFINITION OF DONE
+
+The project is NOT considered complete simply because files were generated.
+
+It is complete only when:
+
+1. Backend starts.
+2. Frontend starts.
+3. Database connects.
+4. Authentication works.
+5. CRUD operations work.
+6. Authorization works.
+7. Validation works.
+8. Filtering/pagination works.
+9. Frontend communicates with backend.
+10. Major user flows work.
+11. Errors are handled.
+12. README is accurate.
+13. Postman collection works.
+14. Build succeeds.
+15. Final requirements audit is completed.
+
+At the end, provide a concise final report containing:
+
+```text
+1. What was implemented
+2. Project structure
+3. Technologies used
+4. How to run backend
+5. How to run frontend
+6. Environment variables required
+7. Test results
+8. Build results
+9. Remaining issues, if any
+10. Final academic requirements audit
+```
+
+Most importantly:
+
+**Never claim that something was tested if it was not actually tested.**
+
+**Never claim the project is complete if a core requirement is still broken.**
