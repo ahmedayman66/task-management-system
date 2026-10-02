@@ -1,0 +1,55 @@
+/* ==========================================================================
+   TaskFlow — RTL & Directional Layout System
+   Optimized for Arabic typography & proper bi-directional interfaces
+   ========================================================================== */
+
+[dir="rtl"] {
+  text-align: start;
+}
+
+[dir="rtl"] body {
+  font-family: 'Cairo', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  letter-spacing: normal;
+}
+
+/* Kanban Board Horizontal Scrolling in RTL */
+[dir="rtl"] .kanban-board-container {
+  direction: rtl;
+}
+
+[dir="rtl"] .kanban-board {
+  flex-direction: row;
+}
+
+/* Modal close button positioning */
+[dir="rtl"] .modal-close-btn {
+  inset-inline-end: 1rem;
+  inset-inline-start: auto;
+}
+
+/* Input group icons alignment */
+[dir="rtl"] .input-icon-start {
+  inset-inline-start: 0.85rem;
+  inset-inline-end: auto;
+}
+
+[dir="rtl"] .input-with-icon-start {
+  padding-inline-start: 2.5rem;
+  padding-inline-end: 0.85rem;
+}
+
+/* Mirrored icons where semantically appropriate */
+[dir="rtl"] .icon-flip-rtl {
+  transform: scaleX(-1);
+}
+
+/* Navigation items spacing */
+[dir="rtl"] .nav-user-area {
+  margin-inline-start: auto;
+  margin-inline-end: 0;
+}
+
+/* Task card badge positioning */
+[dir="rtl"] .task-card-meta {
+  flex-direction: row;
+}
